@@ -1,0 +1,32 @@
+body{
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+canvas{
+  border: solid 2px #FFF;
+}
+.button{
+  background-color: transparent;
+  width: 15vw;
+  height: 35vw;
+  border: none;
+
+  /*border: solid 3px white;*/
+}
+.button .fa{
+  font-size: 7vw;
+  color: #FFF;
+  transition: all 1s;
+}
+.button .fa:hover{
+  font-size: 9vw;;
+  /*background-color: rgb(2, 84, 156);*/
+}
+.button:focus{
+  border: none;
+  font-size: 9vw;
+}
