@@ -95,8 +95,8 @@ var downButton = document.getElementById('down');
 
   function startPressMobi() {
     if (ballSpeedY == 0 && ballSpeedX == 0) {
-      ballSpeedX=6;
-      ballSpeedY= -6;
+      ballSpeedX=cw/200;
+      ballSpeedY= -cw/200;
     }
   }
   canvas.addEventListener('click', startPressMobi);
