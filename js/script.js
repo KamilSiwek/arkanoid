@@ -93,13 +93,21 @@ var downButton = document.getElementById('down');
   }
   window.addEventListener("keydown", playerPosition);
 
+  function startPressMobi() {
+    if (ballSpeedY == 0 && ballSpeedX == 0) {
+      ballSpeedX=6;
+      ballSpeedY= -6;
+    }
+  }
+  canvas.addEventListener('click', startPressMobi);
+
   function up() {
     playerSpeed = 0;
     playerSpeed -= cw/100;//1.5;
   }
   function down() {
     playerSpeed = 0;
-    playerSpeed += cw/100;//1.5;  
+    playerSpeed += cw/100;//1.5;
   }
 
 downButton.removeEventListener("click", up);
