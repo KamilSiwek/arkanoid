@@ -1,9 +1,7 @@
 console.log('ready');
 
 var canvas = document.getElementById('game-pool');
-
 var ctx = canvas.getContext('2d');
-
 var ww = window.innerWidth;
 
 //Pole gry:
@@ -18,8 +16,6 @@ function pool() {
   ctx.drawImage(img,0,0,cw,ch);
 }
 
-
-
 //Player:
 var paddelWidth = cw/4;
 var paddelHeight = cw/40;
@@ -33,13 +29,10 @@ var ballY = playerY - ballSize;
 var ballSpeedX = 0;
 var ballSpeedY = 0;
 
-
 //Wynik:
 var score = [];
 console.log(score);
-
-var chances = [];
-
+var chances = [1,1,1];
 
 //Ball:
 function startBallPosition() {
@@ -71,27 +64,25 @@ function player() {
             playerX = cw - paddelWidth
       }
   //Player - sterowanie:
-var upButton = document.getElementById('up');
-var downButton = document.getElementById('down');
+  var upButton = document.getElementById('up');
+  var downButton = document.getElementById('down');
 
   function playerPosition(e) {
     switch (e.keyCode) {
       case 37:
-        playerSpeed = 0;
-        playerSpeed -= cw/100;
-
+              playerSpeed = 0;
+              playerSpeed -= cw/100;
         break;
       case 39:
-        playerSpeed = 0;
-        playerSpeed += cw/100;
-
+          playerSpeed = 0;
+          playerSpeed += cw/100;
         break;
       case 32:
       if (ballSpeedY == 0) {
-        ballSpeedX = 6;
-        ballSpeedY = -6;
+          ballSpeedX = 6;
+          ballSpeedY = -6;
       }
-      break;
+        break;
     }
   }
   window.addEventListener("keydown", playerPosition);
@@ -106,32 +97,18 @@ var downButton = document.getElementById('down');
 
   function up() {
     playerSpeed = 0;
-    // if (ballSpeedY > 0) {
-    //   playerSpeed -= ballSpeedY
-    // }
-    // if (ballSpeedY < 0) {
-    //   playerSpeed += ballSpeedY
-    // }
-
     playerSpeed -= cw/200;//1.5;
   }
   function down() {
     playerSpeed = 0;
-    // if (ballSpeedY > 0) {
-    //   playerSpeed += ballSpeedY
-    // }
-    // if (ballSpeedY < 0) {
-    //   playerSpeed -= ballSpeedY
-    // }
     playerSpeed += cw/200;//1.5;
   }
 
-downButton.removeEventListener("click", up);
-upButton.removeEventListener("click", down);
+  downButton.removeEventListener("click", up);
+  upButton.removeEventListener("click", down);
 
-upButton.addEventListener("click", up);
-downButton.addEventListener("click", down);
-
+  upButton.addEventListener("click", up);
+  downButton.addEventListener("click", down);
 }
 
 
@@ -146,11 +123,13 @@ function ball() {
   if(ballY <= 0 ) { //odbicie od góry i od dołu || ballY + ballSize>=ch
     ballSpeedY = -ballSpeedY;
   }
-  if (ballY > ch) {
+  if (ballY > ch) {//przekroczenie dolnej granicy:
     ballSpeedY = 0;
     ballSpeedX = 0;
     ballX = playerX + paddelWidth/2 - ballSize/2;
     ballY = playerY - ballSize;
+    chances.shift();
+    console.log(chances);
   }
   if(ballX <= 0 || ballX + ballSize>=cw) { //odbicie od boków
     ballSpeedX = -ballSpeedX;
@@ -179,14 +158,14 @@ var w6 = w5 + ew + odstepX;
 var w7 = w6 + ew + odstepX;
 var w8 = w7 + ew + odstepX;
 var w = [w1, w2, w3, w4, w5, w6, w7, w8];
-
+//Tablica usuwania bloków:
 var remove = [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1];
 console.log(remove.length);
 
 var rowI = odstepY;
 var rowII = rowI + odstepY + eh;
 var rowIII = rowII + odstepY + eh;
-
+//Tablica ilości bloków w rzędzie:
 var blocks = [1,2,3,4,5,6,7,8];
 
 //Funkcje bloków:
@@ -199,6 +178,9 @@ function enemies1(n) {//Pierwszy rząd bloków:
   }
   ctx.fillStyle = 'yellow';
   ctx.fillRect(w[n], rowI, enemyWidth, enemyHeight);
+  var img = new Image();
+  img.src = ('img/block.png');
+  ctx.drawImage(img,w[n], rowI, enemyWidth, enemyHeight);
 }
 
 function enemies2(n) {//Drugi rząd bloków:
@@ -210,6 +192,9 @@ function enemies2(n) {//Drugi rząd bloków:
   }
   ctx.fillStyle = 'green';
   ctx.fillRect(w[n], rowII, enemyWidth, enemyHeight);
+  var img = new Image();
+  img.src = ('img/block.png');
+  ctx.drawImage(img,w[n], rowII, enemyWidth, enemyHeight);
 }
 
 function enemies3(n) {//Trzeci rząd bloków:
@@ -219,8 +204,11 @@ function enemies3(n) {//Trzeci rząd bloków:
     remove[n + 2*blocks.length] = 0;
     console.log(remove);
   }
-  ctx.fillStyle = 'red';
-  ctx.fillRect(w[n], rowIII, enemyWidth, enemyHeight);
+  // ctx.fillStyle = 'red';
+  // ctx.fillRect(w[n], rowIII, enemyWidth, enemyHeight);
+  var img = new Image();
+  img.src = ('img/block.png');
+  ctx.drawImage(img,w[n], rowIII, enemyWidth, enemyHeight);
 }
 
 //Funkcja wywołująca bloki, znikające po zderzeniu z piłką:
@@ -275,6 +263,28 @@ function enemies() {
     enemies3(7);
   }
 }
+function live() {
+  var img = new Image();
+  img.src = ('img/paddle.png');
+  if (chances.length == 3) {
+    ctx.drawImage(img,20,ch-paddelHeight,paddelWidth/4,paddelHeight/4);
+    ctx.drawImage(img,2*20 + paddelWidth/4,ch-paddelHeight,paddelWidth/4,paddelHeight/4);
+    ctx.drawImage(img,3*20 + paddelWidth/2,ch-paddelHeight,paddelWidth/4,paddelHeight/4);
+  }else if (chances.length == 2) {
+    ctx.drawImage(img,20,ch-paddelHeight,paddelWidth/4,paddelHeight/4);
+    ctx.drawImage(img,2*20 + paddelWidth/4,ch-paddelHeight,paddelWidth/4,paddelHeight/4);
+  }else if (chances.length == 1) {
+    ctx.drawImage(img,20,ch-paddelHeight,paddelWidth/4,paddelHeight/4);
+  }else if (chances.length == 0) {
+    ctx.font = "50px Arial";
+    ctx.strokeText("You Lose :(", cw/2 - 25,ch/2 - 25);
+  }
+}
+function chance() {
+  if (chances.length == 3) {
+    live3();
+  }
+}
 
 //Wywoływanie funkcji:
 function game(){
@@ -284,6 +294,8 @@ function game(){
   win()
   startBallPosition()
   enemies();
+  //chance();
+  live();
 }
 
 setInterval(game,1000/60);
